@@ -17,7 +17,11 @@ import kotlinx.android.synthetic.main.shimmer_placeholder_layout.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private val getImageDayUseCase = AppModule.getInstance(this).getImageDayUseCase()
+
+    private val getImageDayUseCase by lazy {
+        AppModule.getInstance(this).getImageDayUseCase()
+    }
+
     private val requestImage = MainModule.getRequestImage()
 
     override fun onCreate(savedInstanceState: Bundle?) {

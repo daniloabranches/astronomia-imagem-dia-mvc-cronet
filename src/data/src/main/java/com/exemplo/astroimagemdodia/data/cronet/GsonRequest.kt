@@ -1,10 +1,5 @@
-package com.exemplo.astroimagemdodia.data.volley
+package com.exemplo.astroimagemdodia.data.cronet
 
-import com.android.volley.NetworkResponse
-import com.android.volley.ParseError
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.HttpHeaderParser
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import java.io.UnsupportedEncodingException
@@ -18,14 +13,14 @@ import java.nio.charset.Charset
  * @param headers Map of request headers
  */
 class GsonRequest<T>(
-    url: String,
+    /*url: String,
     method: Int,
     private val clazz: Class<T>,
     private val headers: MutableMap<String, String>?,
     private val listener: Response.Listener<T>,
-    errorListener: Response.ErrorListener
-) : Request<T>(method, url, errorListener) {
-    private val gson = Gson()
+    errorListener: Response.ErrorListener*/
+) /*: Request<T>(method, url, errorListener) */{
+    /*private val gson = Gson()
 
     override fun getHeaders(): MutableMap<String, String> = headers ?: super.getHeaders()
 
@@ -46,5 +41,5 @@ class GsonRequest<T>(
         } catch (e: JsonSyntaxException) {
             Response.error(ParseError(e))
         }
-    }
+    }*/
 }
