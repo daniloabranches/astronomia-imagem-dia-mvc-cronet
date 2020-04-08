@@ -1,7 +1,8 @@
 package com.exemplo.astroimagemdodia.domain.repositories
 
-import java.util.*
+import com.exemplo.astroimagemdodia.domain.callback.Callback
+import com.exemplo.astroimagemdodia.domain.entities.ImageDayEntity
 
 interface ImageDayRepository {
-    fun getImageDay(observer: Observer) : Observable
+    fun getImageDay(callback: Callback<ImageDayEntity>)
 }

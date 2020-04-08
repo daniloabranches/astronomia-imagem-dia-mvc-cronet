@@ -12,9 +12,9 @@ import java.nio.ByteBuffer
 import java.nio.channels.Channels
 import java.nio.channels.WritableByteChannel
 
-class GsonUrlRequestCallback<R>(
+class GsonUrlRequestCallback<R, T>(
     private val clazz: Class<R>,
-    private val observable: Observable<R>
+    private val observable: Observable<R, T>
 ) : UrlRequest.Callback() {
 
     private val bytesReceived: ByteArrayOutputStream = ByteArrayOutputStream()

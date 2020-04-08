@@ -4,10 +4,10 @@ import android.widget.ImageView
 import com.squareup.picasso.Picasso
 
 class PicassoRequestImage : RequestImage {
-    override fun load(url: String, view: ImageView, callback: Callback) {
+    override fun load(url: String, view: ImageView, callback: RequestImage.Callback) {
         Picasso.get().load(url).into(view, object : com.squareup.picasso.Callback {
-            override fun onSuccess() = callback.onSuccess()
-            override fun onError(e: Exception?) = callback.onError(e)
+            override fun onSuccess() = callback.success()
+            override fun onError(e: Exception?) = callback.error(e)
         })
     }
 }

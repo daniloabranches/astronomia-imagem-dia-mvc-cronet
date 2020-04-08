@@ -25,8 +25,8 @@ class CronetEngineAdapter(
         CronetEngine.Builder(context).build()
     }
 
-    inline fun <reified R> prepare(method: String, url: String): Observable<R> {
-        val observable = Observable<R>()
+    inline fun <reified R, T> prepare(method: String, url: String): Observable<R, T> {
+        val observable = Observable<R, T>()
 
         val requestBuilder = cronetEngine.newUrlRequestBuilder(
             prepareUrl(url),
