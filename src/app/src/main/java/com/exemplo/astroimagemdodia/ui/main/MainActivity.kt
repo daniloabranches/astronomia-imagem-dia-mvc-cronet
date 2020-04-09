@@ -9,7 +9,7 @@ import com.exemplo.astroimagemdodia.R
 import com.exemplo.astroimagemdodia.compat.ConnectivityManagerCompat
 import com.exemplo.astroimagemdodia.configuration.AppModule
 import com.exemplo.astroimagemdodia.configuration.MainModule
-import com.exemplo.astroimagemdodia.domain.callback.Callback
+import com.exemplo.astroimagemdodia.domain.core.Callback
 import com.exemplo.astroimagemdodia.domain.entities.ImageDayEntity
 import com.exemplo.astroimagemdodia.helper.Date
 import com.exemplo.astroimagemdodia.image.RequestImage

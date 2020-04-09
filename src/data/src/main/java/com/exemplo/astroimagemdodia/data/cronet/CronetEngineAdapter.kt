@@ -1,12 +1,12 @@
 package com.exemplo.astroimagemdodia.data.cronet
 
-import android.content.Context
+import com.exemplo.astroimagemdodia.domain.core.Starter
 import org.chromium.net.CronetEngine
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CronetEngineAdapter(
-    context: Context,
+    val cronetEngine: CronetEngine,
     private val baseUrl: String,
     val executor: ExecutorService,
     private val queryParameters: String
@@ -21,17 +21,12 @@ class CronetEngineAdapter(
         }
     }
 
-    val cronetEngine: CronetEngine by lazy {
-        CronetEngine.Builder(context).build()
-    }
-
-    inline fun <reified R, T> prepare(method: String, url: String): Observable<R, T> {
-        val observable = Observable<R, T>()
+    inline fun <reified R, T> createCaller(method: String, url: String): CallerImp<R, T> {
+        val caller = CallerImp<R, T>()
 
         val requestBuilder = cronetEngine.newUrlRequestBuilder(
             prepareUrl(url),
-            //TODO: GsonUrlRequestCallback depende de observable
-            GsonUrlRequestCallback(R::class.java, observable),
+            GsonUrlRequestCallback(R::class.java, caller),
             executor
         )
 
@@ -39,14 +34,15 @@ class CronetEngineAdapter(
             .setHttpMethod(method)
             .build()
 
-        //TODO: observable depende de request
-        observable.starter(object : Starter<R> {
+        //TODO: caller precisa do request e request precisa do caller
+        caller.starter(object :
+            Starter<R> {
             override fun start() {
                 request.start()
             }
         })
 
-        return observable
+        return caller
     }
 
     fun prepareUrl(resource: String): String {
@@ -59,7 +55,7 @@ class CronetEngineAdapter(
         }
     }
 
-    class Builder(private val context: Context) {
+    class Builder(private val cronetEngine: CronetEngine) {
         private var baseUrl: String = ""
         private var queryParameters: String = ""
         private var executor: ExecutorService? = null
@@ -87,7 +83,7 @@ class CronetEngineAdapter(
         fun build(): CronetEngineAdapter {
             val executor = executor ?: Executors.newSingleThreadExecutor()
 
-            return CronetEngineAdapter(context, baseUrl, executor, queryParameters)
+            return CronetEngineAdapter(cronetEngine, baseUrl, executor, queryParameters)
         }
     }
 }

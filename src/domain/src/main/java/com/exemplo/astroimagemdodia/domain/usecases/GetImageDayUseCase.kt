@@ -1,6 +1,6 @@
 package com.exemplo.astroimagemdodia.domain.usecases
 
-import com.exemplo.astroimagemdodia.domain.callback.Callback
+import com.exemplo.astroimagemdodia.domain.core.Callback
 import com.exemplo.astroimagemdodia.domain.entities.ImageDayEntity
 import com.exemplo.astroimagemdodia.domain.repositories.ImageDayRepository
 

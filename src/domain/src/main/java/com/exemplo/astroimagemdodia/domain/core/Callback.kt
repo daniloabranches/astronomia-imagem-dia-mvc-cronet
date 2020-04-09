@@ -1,6 +1,5 @@
-package com.exemplo.astroimagemdodia.domain.callback
+package com.exemplo.astroimagemdodia.domain.core
 
-//TODO: Definir melhor pacote
 interface Callback<T> {
     fun success(data: T)
     fun error(error: Throwable)
