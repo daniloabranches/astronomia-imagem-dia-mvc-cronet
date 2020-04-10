@@ -14,7 +14,7 @@ import java.nio.channels.WritableByteChannel
 
 class GsonUrlRequestCallback<R, T>(
     private val clazz: Class<R>,
-    private val caller: CallerImp<R, T>
+    private val call: CallImp<R, T>
 ) : UrlRequest.Callback() {
 
     private val bytesReceived: ByteArrayOutputStream = ByteArrayOutputStream()
@@ -63,7 +63,7 @@ class GsonUrlRequestCallback<R, T>(
     ) {
         //TODO: Rever isso aqui
 
-        caller.error(error ?: Throwable("ERRO"))
+        call.error(error ?: Throwable("unknown error"))
     }
 
     override fun onSucceeded(request: UrlRequest?, info: UrlResponseInfo?) {
@@ -73,11 +73,11 @@ class GsonUrlRequestCallback<R, T>(
 
         try {
             val data = parseJson(byteArray)
-            caller.success(data)
+            call.success(data)
         } catch (error: UnsupportedEncodingException) {
-            caller.error(error)
+            call.error(error)
         } catch (error: JsonSyntaxException) {
-            caller.error(error)
+            call.error(error)
         }
     }
 

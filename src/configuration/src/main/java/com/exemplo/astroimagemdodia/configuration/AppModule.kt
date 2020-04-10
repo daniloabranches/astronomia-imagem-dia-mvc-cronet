@@ -8,7 +8,6 @@ import com.exemplo.astroimagemdodia.data.services.NasaServiceImp
 import com.exemplo.astroimagemdodia.domain.repositories.ImageDayRepository
 import com.exemplo.astroimagemdodia.domain.usecases.GetImageDayUseCase
 import org.chromium.net.CronetEngine
-import java.util.concurrent.Executors
 
 class AppModule(context: Context) {
     companion object {
@@ -25,14 +24,12 @@ class AppModule(context: Context) {
 
     private val cronetEngineAdapter by lazy {
         val configService = ConfigService()
-
         val cronetEngine = CronetEngine.Builder(context.applicationContext).build()
 
-        CronetEngineAdapter.Builder(cronetEngine)
-            .baseUrl(configService.getApiUrl())
-            .executor(Executors.newSingleThreadExecutor())
-            .addQueryParameter("api_key", configService.getApiKey())
-            .build()
+        CronetEngineAdapter(cronetEngine).also {
+            it.baseUrl = configService.getApiUrl()
+            it.addQueryParameter("api_key", configService.getApiKey())
+        }
     }
 
     private val nasaService by lazy {
