@@ -4,6 +4,7 @@ import android.os.Handler
 import com.exemplo.astroimagemdodia.domain.core.Callback
 import org.chromium.net.CronetEngine
 import org.chromium.net.UrlRequest
+import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
 class CallImp<R, T>(
@@ -15,10 +16,10 @@ class CallImp<R, T>(
     private val handler = Handler()
     private lateinit var request: UrlRequest
     private lateinit var mapper: Mapper<R, T>
-    private var callback: Callback<T>? = null
+    private var callback: WeakReference<Callback<T>>? = null
 
     override fun callback(callback: Callback<T>): Call<R, T> {
-        this.callback = callback
+        this.callback = WeakReference(callback)
         return this
     }
 
@@ -45,11 +46,11 @@ class CallImp<R, T>(
     }
 
     override fun error(throwable: Throwable) {
-        handler.post { callback?.error(throwable) }
+        handler.post { callback?.get()?.error(throwable) }
     }
 
     override fun success(data: R) {
-        handler.post { callback?.success(mapper.execute(data)) }
+        handler.post { callback?.get()?.success(mapper.execute(data)) }
     }
 
     class CallBuilder(
@@ -57,10 +58,11 @@ class CallImp<R, T>(
         private val baseUrl: String,
         private val queryParameters: String
     ) {
-        var url: String? = null
+        var url: String = ""
             set(value) {
-                if (value == null) throw Exception("url cannot be null")
-                if (value.isBlank()) throw Exception("url cannot be empty")
+                field = value
+
+                throwUrlInvalid()
 
                 val newUrl = "$baseUrl$value"
 
@@ -77,6 +79,10 @@ class CallImp<R, T>(
                 field = value
             }
 
+        fun throwUrlInvalid() {
+            if (url.isBlank()) throw Exception("url cannot be empty")
+        }
+
         fun method(method: String): CallBuilder {
             this.method = method
             return this
@@ -88,9 +94,9 @@ class CallImp<R, T>(
         }
 
         inline fun <reified R, T> build(): Call<R, T> {
-            if (url == null) throw Exception("url cannot be null")
+            throwUrlInvalid()
 
-            return CallImp(R::class.java, cronetEngine, url!!, method)
+            return CallImp(R::class.java, cronetEngine, url, method)
         }
     }
 }
